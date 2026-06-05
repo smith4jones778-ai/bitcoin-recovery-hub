@@ -1,13 +1,12 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>User Dashboard</title>
+<title>Crypto Recovery Dashboard</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
 
@@ -18,58 +17,94 @@ box-sizing:border-box;
 font-family:'Poppins',sans-serif;
 }
 
+:root{
+--primary:#f7931a;
+--dark:#081120;
+--dark2:#102542;
+--light:#f5f7fb;
+--success:#22c55e;
+--danger:#ef4444;
+--warning:#f59e0b;
+}
+
 body{
-background:#f5f7fb;
+background:linear-gradient(135deg,#eef2f7,#f8fafc);
+overflow-x:hidden;
 }
-
-.dashboard{
-display:flex;
-min-height:100vh;
-}
-
-/* Sidebar */
 
 .sidebar{
-width:260px;
-background:#0f172a;
-color:white;
-padding:25px;
 position:fixed;
-height:100%;
-overflow:auto;
+left:0;
+top:0;
+width:280px;
+height:100vh;
+background:linear-gradient(180deg,var(--dark),var(--dark2));
+padding:25px;
+overflow-y:auto;
+z-index:999;
+box-shadow:10px 0 40px rgba(0,0,0,.15);
 }
 
 .logo{
-font-size:26px;
-font-weight:700;
-color:#f7931a;
+font-size:30px;
+font-weight:800;
+color:var(--primary);
+text-align:center;
+margin-bottom:35px;
+}
+
+.user-mini{
+background:rgba(255,255,255,.08);
+border-radius:20px;
+padding:20px;
+text-align:center;
 margin-bottom:30px;
 }
 
+.user-avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+margin:auto;
+background:linear-gradient(135deg,#f7931a,#ffb347);
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:32px;
+font-weight:700;
+color:white;
+}
+
+.user-mini h3{
+margin-top:10px;
+color:white;
+}
+
+.user-mini p{
+color:#cbd5e1;
+font-size:13px;
+}
+
 .menu a{
-display:block;
-padding:14px;
-margin-bottom:8px;
-border-radius:12px;
+display:flex;
+align-items:center;
+padding:15px;
+margin-bottom:10px;
+background:rgba(255,255,255,.04);
+border-radius:15px;
 text-decoration:none;
 color:white;
+font-weight:500;
 transition:.3s;
 }
 
 .menu a:hover{
-background:#1e293b;
+background:var(--primary);
+transform:translateX(5px);
 }
-
-.logout-btn{
-background:#ef4444;
-margin-top:20px;
-}
-
-/* Main */
 
 .main{
-flex:1;
-margin-left:260px;
+margin-left:280px;
 padding:25px;
 }
 
@@ -80,34 +115,129 @@ align-items:center;
 margin-bottom:25px;
 }
 
-.welcome h2{
-font-size:28px;
-color:#111827;
+.page-title{
+font-size:30px;
+font-weight:700;
+color:var(--dark);
 }
 
-.welcome p{
-color:#6b7280;
-}
-
-.profile{
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.avatar{
-width:45px;
-height:45px;
-border-radius:50%;
-background:#f7931a;
-display:flex;
-align-items:center;
-justify-content:center;
+.logout-btn{
+border:none;
+padding:14px 25px;
+border-radius:50px;
+background:linear-gradient(135deg,#dc2626,#ef4444);
 color:white;
-font-weight:bold;
+cursor:pointer;
+font-weight:600;
+box-shadow:0 10px 25px rgba(239,68,68,.35);
 }
 
-/* Cards */
+.hero-card{
+background:linear-gradient(135deg,var(--dark),var(--dark2));
+color:white;
+border-radius:30px;
+padding:35px;
+margin-bottom:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.15);
+}
+
+.hero-card h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+.hero-card p{
+opacity:.9;
+line-height:1.8;
+}
+
+.profile-grid{
+display:grid;
+grid-template-columns:350px 1fr;
+gap:25px;
+margin-bottom:25px;
+}
+
+.profile-card{
+background:white;
+padding:25px;
+border-radius:25px;
+box-shadow:0 20px 40px rgba(0,0,0,.08);
+}
+
+.profile-big{
+width:120px;
+height:120px;
+border-radius:50%;
+margin:auto;
+background:linear-gradient(135deg,#f7931a,#ffb347);
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:50px;
+font-weight:700;
+color:white;
+}
+
+.profile-card h2{
+text-align:center;
+margin-top:15px;
+color:var(--dark);
+}
+
+.profile-card p{
+text-align:center;
+color:#64748b;
+margin-top:5px;
+}
+
+.info-row{
+padding:12px 0;
+border-bottom:1px solid #eee;
+}
+
+.info-row strong{
+color:var(--dark);
+}
+
+.wallet-card{
+background:linear-gradient(135deg,#0f172a,#1e293b);
+border-radius:30px;
+padding:30px;
+color:white;
+box-shadow:0 20px 50px rgba(0,0,0,.15);
+position:relative;
+overflow:hidden;
+}
+
+.wallet-card::before{
+content:'';
+position:absolute;
+width:250px;
+height:250px;
+background:rgba(255,255,255,.05);
+border-radius:50%;
+right:-100px;
+top:-100px;
+}
+
+.wallet-title{
+font-size:18px;
+opacity:.8;
+}
+
+.balance{
+font-size:50px;
+font-weight:800;
+margin-top:20px;
+}
+
+.wallet-address{
+margin-top:20px;
+font-size:14px;
+word-break:break-all;
+opacity:.85;
+}
 
 .stats{
 display:grid;
@@ -116,150 +246,164 @@ gap:20px;
 margin-bottom:25px;
 }
 
-.card{
+.stat-card{
 background:white;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+padding:25px;
+border-radius:25px;
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+transition:.4s;
+cursor:pointer;
 }
 
-.card h4{
-color:#6b7280;
-font-size:14px;
+.stat-card:hover{
+transform:translateY(-10px);
+}
+
+.stat-card h4{
+color:#64748b;
 margin-bottom:10px;
 }
 
-.card h2{
-font-size:28px;
-color:#111827;
+.stat-card h1{
+font-size:42px;
+color:var(--dark);
 }
 
-/* Grid */
-
-.grid{
+.quick-actions{
 display:grid;
-grid-template-columns:1fr 1fr;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
 gap:20px;
-margin-bottom:20px;
+margin-bottom:25px;
 }
 
-.section-card{
-background:white;
-padding:25px;
+.action-btn{
+text-decoration:none;
+text-align:center;
+padding:18px;
 border-radius:20px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+background:linear-gradient(135deg,#f7931a,#ffb347);
+color:white;
+font-weight:700;
+box-shadow:0 12px 30px rgba(247,147,26,.35);
+transition:.3s;
 }
 
-.section-card h3{
-margin-bottom:15px;
+.action-btn:hover{
+transform:translateY(-6px);
 }
 
-/* Tables */
+.content-grid{
+display:grid;
+grid-template-columns:2fr 1fr;
+gap:25px;
+}
+
+.card{
+background:white;
+border-radius:25px;
+padding:25px;
+box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.card-title{
+font-size:22px;
+font-weight:700;
+margin-bottom:20px;
+color:var(--dark);
+}
 
 table{
 width:100%;
 border-collapse:collapse;
 }
 
-th,td{
-padding:12px;
-text-align:left;
+table th{
+background:var(--dark);
+color:white;
+padding:15px;
+}
+
+table td{
+padding:15px;
 border-bottom:1px solid #eee;
 }
 
-th{
+.notification{
+padding:15px;
 background:#f8fafc;
+border-radius:15px;
+margin-bottom:15px;
 }
 
-.status{
-padding:5px 10px;
-border-radius:20px;
-font-size:12px;
-display:inline-block;
+.notification strong{
+display:block;
+margin-bottom:5px;
 }
 
-.pending{
-background:#fef3c7;
+@media(max-width:1100px){
+
+.profile-grid{
+grid-template-columns:1fr;
 }
 
-.success{
-background:#dcfce7;
+.content-grid{
+grid-template-columns:1fr;
 }
 
-/* Progress */
-
-.progress-box{
-margin-top:15px;
 }
 
-.progress{
-height:12px;
-background:#e5e7eb;
-border-radius:20px;
-overflow:hidden;
-}
-
-.progress-fill{
-height:100%;
-width:0%;
-background:#22c55e;
-}
-
-/* Responsive */
-
-.mobile-toggle{
-display:none;
-}
-
-@media(max-width:900px){
+@media(max-width:850px){
 
 .sidebar{
-left:-260px;
-transition:.3s;
-z-index:999;
-}
-
-.sidebar.show{
-left:0;
+position:relative;
+width:100%;
+height:auto;
 }
 
 .main{
 margin-left:0;
 }
 
-.grid{
-grid-template-columns:1fr;
-}
-
-.mobile-toggle{
-display:block;
-font-size:24px;
-cursor:pointer;
-}
-
 }
 
 </style>
 </head>
+
 <body>
 
-<div class="dashboard">
-
-<div class="sidebar" id="sidebar">
+<div class="sidebar">
 
 <div class="logo">
-BTC Recovery
+Crypto Recovery
+</div>
+
+<div class="user-mini">
+
+<div class="user-avatar" id="miniAvatar">
+U
+</div>
+
+<h3 id="miniName">
+Loading...
+</h3>
+
+<p>Verified Client</p>
+
 </div>
 
 <div class="menu">
 
-<a href="dashboard.html">Dashboard</a>
-<a href="case-details.html">Recovery Cases</a>
-<a href="transactions.html">Transactions</a>
+<a href="#">Dashboard</a>
+
+<a href="create-case.html">Create Case</a>
+
+<a href="my-cases.html">My Cases</a>
+
 <a href="messages.html">Messages</a>
-<a href="profile.html">Profile</a>
+
+<a href="transactions.html">Transactions</a>
+
 <a href="settings.html">Settings</a>
-<a href="#" class="logout-btn" id="logoutBtn">Logout</a>
 
 </div>
 
@@ -269,102 +413,216 @@ BTC Recovery
 
 <div class="topbar">
 
-<div class="welcome">
-<div class="mobile-toggle" onclick="toggleMenu()">☰</div>
-<h2 id="fullName">Welcome</h2>
-<p id="email">Loading...</p>
+<div class="page-title">
+Dashboard
 </div>
 
-<div class="profile">
-<div class="avatar" id="avatar">
+<button class="logout-btn" id="logoutBtn">
+Logout
+</button>
+
+</div>
+  <div class="hero-card">
+
+<h1>
+Welcome Back,
+<span id="welcomeName">Loading...</span>
+</h1>
+
+<p>
+Manage your recovery cases, monitor wallet activity, communicate with support,
+track investigations, upload evidence, and receive real-time case updates from one secure dashboard.
+</p>
+
+</div>
+
+<div class="profile-grid">
+
+<div class="profile-card">
+
+<div class="profile-big" id="profileAvatar">
 U
 </div>
+
+<h2 id="fullName">
+Loading...
+</h2>
+
+<p id="email">
+Loading...
+</p>
+
+<div style="margin-top:25px;">
+
+<div class="info-row">
+<strong>Country:</strong>
+<span id="country">Loading...</span>
+</div>
+
+<div class="info-row">
+<strong>Phone:</strong>
+<span id="phone">Loading...</span>
+</div>
+
+<div class="info-row">
+<strong>Status:</strong>
+<span style="color:#22c55e;font-weight:700;">
+Verified
+</span>
+</div>
+
+<div class="info-row">
+<strong>Member Since:</strong>
+<span id="memberSince">
+Loading...
+</span>
+</div>
+
+</div>
+
+</div>
+
+<div class="wallet-card">
+
+<div class="wallet-title">
+Registered Wallet
+</div>
+
+<div class="balance">
+$0.00
+</div>
+
+<div class="wallet-address" id="walletAddress">
+Loading Wallet...
+</div>
+
+<div style="margin-top:25px;display:flex;gap:10px;flex-wrap:wrap;">
+
+<button style="
+padding:12px 20px;
+border:none;
+border-radius:15px;
+background:#f7931a;
+color:white;
+font-weight:700;
+cursor:pointer;
+">
+Wallet Details
+</button>
+
+<button style="
+padding:12px 20px;
+border:none;
+border-radius:15px;
+background:white;
+color:#081120;
+font-weight:700;
+cursor:pointer;
+">
+Recovery Progress
+</button>
+
+</div>
+
 </div>
 
 </div>
 
 <div class="stats">
 
-<div class="card">
-<h4>Claim Amount</h4>
-<h2 id="claimAmount">$0</h2>
+<div class="stat-card">
+
+<h4>Total Cases</h4>
+
+<h1 id="totalCases">
+0
+</h1>
+
 </div>
 
-<div class="card">
-<h4>Recovery Progress</h4>
-<h2 id="progressText">0%</h2>
+<div class="stat-card">
+
+<h4>Active Cases</h4>
+
+<h1 id="activeCases">
+0
+</h1>
+
 </div>
 
-<div class="card">
-<h4>Transactions</h4>
-<h2 id="transactionCount">0</h2>
+<div class="stat-card">
+
+<h4>Completed Cases</h4>
+
+<h1 id="completedCases">
+0
+</h1>
+
 </div>
 
-<div class="card">
+<div class="stat-card">
+
 <h4>Messages</h4>
-<h2 id="messageCount">0</h2>
-</div>
 
-</div>
-
-<div class="grid">
-
-<div class="section-card">
-
-<h3>Recovery Case</h3>
-
-<p><strong>Case ID:</strong> <span id="caseId">---</span></p>
-<br>
-
-<p><strong>Status:</strong> <span id="caseStatus">Pending</span></p>
-
-<div class="progress-box">
-
-<div class="progress">
-<div class="progress-fill" id="progressFill"></div>
-</div>
+<h1 id="messageCount">
+0
+</h1>
 
 </div>
 
 </div>
 
-<div class="section-card">
+<div class="quick-actions">
 
-<h3>Wallet Information</h3>
+<a href="create-case.html" class="action-btn">
++ Create Recovery Case
+</a>
 
-<p><strong>Wallet Address</strong></p>
-<p id="walletAddress">Not Added</p>
+<a href="messages.html" class="action-btn">
+Support Messages
+</a>
 
-<br>
+<a href="transactions.html" class="action-btn">
+Transaction History
+</a>
 
-<p><strong>Balance</strong></p>
-<p id="walletBalance">0 BTC</p>
+<a href="my-cases.html" class="action-btn">
+View All Cases
+</a>
 
 </div>
 
+<div class="content-grid">
+
+<div class="card">
+
+<div class="card-title">
+Recent Recovery Cases
 </div>
 
-<div class="section-card">
-
-<h3>Recent Transactions</h3>
+<div style="overflow-x:auto;">
 
 <table>
 
 <thead>
+
 <tr>
-<th>Date</th>
+<th>Case ID</th>
 <th>Type</th>
-<th>Amount</th>
 <th>Status</th>
+<th>Date</th>
 </tr>
+
 </thead>
 
-<tbody id="transactionsTable">
+<tbody id="caseTable">
 
 <tr>
-<td colspan="4">
-No Transactions
+
+<td colspan="4" style="text-align:center;">
+No Cases Available
 </td>
+
 </tr>
 
 </tbody>
@@ -373,57 +631,87 @@ No Transactions
 
 </div>
 
-<br>
+</div>
 
-<div class="section-card">
+<div class="card">
 
-<h3>Latest Messages</h3>
+<div class="card-title">
+Notifications
+</div>
 
-<div id="messagesList">
-No Messages
+<div class="notification">
+
+<strong>Welcome</strong>
+
+Your dashboard is active and ready for use.
+
+</div>
+
+<div class="notification">
+
+<strong>Support Center</strong>
+
+You can contact administrators from the Messages section.
+
+</div>
+
+<div class="notification">
+
+<strong>Case Tracking</strong>
+
+All updates from administrators will appear here.
+
+</div>
+
+<div class="notification">
+
+<strong>Transaction Logs</strong>
+
+Recovery-related transactions will be listed in your transaction history.
+
 </div>
 
 </div>
 
 </div>
-
-</div>
-
-<script>
-function toggleMenu(){
-document.getElementById("sidebar")
-.classList.toggle("show");
-}
-</script>
+  </div>
 
 <script type="module">
 
 import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
 
 import {
 getAuth,
 onAuthStateChanged,
 signOut
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
 import {
 getDatabase,
 ref,
+get,
 onValue
 }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
 const firebaseConfig = {
 
 apiKey: "AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
 authDomain: "email-5e336.firebaseapp.com",
+
 databaseURL: "https://email-5e336-default-rtdb.firebaseio.com",
+
 projectId: "email-5e336",
+
 storageBucket: "email-5e336.appspot.com",
+
 messagingSenderId: "561655323170",
+
 appId: "1:561655323170:web:42fcf886c34f2d5a16487b",
+
 measurementId: "G-J92WNBY5RL"
 
 };
@@ -432,127 +720,212 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, async(user)=>{
 
 if(!user){
+
 window.location.href="login.html";
 return;
+
 }
 
-const uid = user.uid;
-
-onValue(ref(db,"users/"+uid),(snap)=>{
-
-if(!snap.exists()) return;
-
-const data = snap.val();
-
-document.getElementById("fullName").innerText =
-"Welcome, " + (data.fullName || "User");
-
-document.getElementById("email").innerText =
-data.email || "";
-
-document.getElementById("avatar").innerText =
-(data.fullName || "U").charAt(0).toUpperCase();
-
-document.getElementById("walletAddress").innerText =
-data.walletAddress || "Not Added";
-
-document.getElementById("walletBalance").innerText =
-data.walletBalance || "0 BTC";
+loadProfile(user.uid);
+loadCases(user.uid);
+loadMessages(user.uid);
 
 });
 
-onValue(ref(db,"cases/"+uid),(snap)=>{
+async function loadProfile(uid){
+
+try{
+
+const snap =
+await get(ref(db,"users/"+uid));
 
 if(!snap.exists()) return;
 
-const c = snap.val();
+const user = snap.val();
 
-document.getElementById("caseId").innerText =
-c.caseId || "---";
+document.getElementById("miniName").innerHTML =
+user.fullName || "User";
 
-document.getElementById("caseStatus").innerText =
-c.status || "Pending";
+document.getElementById("welcomeName").innerHTML =
+user.fullName || "User";
 
-document.getElementById("claimAmount").innerText =
-"$" + (c.claimAmount || 0);
+document.getElementById("fullName").innerHTML =
+user.fullName || "";
 
-const progress = c.progress || 0;
+document.getElementById("email").innerHTML =
+user.email || "";
 
-document.getElementById("progressText").innerText =
-progress + "%";
+document.getElementById("country").innerHTML =
+user.country || "";
 
-document.getElementById("progressFill").style.width =
-progress + "%";
+document.getElementById("phone").innerHTML =
+user.phone || "";
 
-});
+document.getElementById("walletAddress").innerHTML =
+user.walletAddress || "No Wallet Added";
 
-onValue(ref(db,"transactions/"+uid),(snap)=>{
+let firstLetter = "U";
 
-const table =
-document.getElementById("transactionsTable");
+if(user.fullName){
 
-table.innerHTML = "";
+firstLetter =
+user.fullName.charAt(0).toUpperCase();
 
-let count = 0;
+}
 
-snap.forEach(item=>{
+document.getElementById("miniAvatar").innerHTML =
+firstLetter;
 
-count++;
+document.getElementById("profileAvatar").innerHTML =
+firstLetter;
 
-const tx = item.val();
+if(user.createdAt){
 
-table.innerHTML += `
+const date =
+new Date(user.createdAt);
+
+document.getElementById("memberSince")
+.innerHTML =
+date.toLocaleDateString();
+
+}
+
+}catch(error){
+
+console.error(error);
+
+}
+
+}
+
+function loadCases(uid){
+
+const casesRef = ref(db,"cases");
+
+onValue(casesRef,(snapshot)=>{
+
+let total = 0;
+let active = 0;
+let completed = 0;
+
+let html = "";
+
+if(snapshot.exists()){
+
+snapshot.forEach(item=>{
+
+const data = item.val();
+
+if(data.userId === uid){
+
+total++;
+
+if(data.status === "Completed"){
+
+completed++;
+
+}else{
+
+active++;
+
+}
+
+html += `
 <tr>
-<td>${tx.date || "-"}</td>
-<td>${tx.type || "-"}</td>
-<td>${tx.amount || "-"}</td>
-<td><span class="status pending">${tx.status || "-"}</span></td>
+<td>${data.caseId || ''}</td>
+<td>${data.caseType || 'Recovery'}</td>
+<td>
+<span style="
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+background:
+${data.status==='Completed'
+? '#dcfce7'
+: '#fef3c7'};
+color:
+${data.status==='Completed'
+? '#166534'
+: '#92400e'};
+">
+${data.status || 'Pending'}
+</span>
+</td>
+<td>${data.createdAt || ''}</td>
 </tr>
 `;
 
-});
-
-document.getElementById("transactionCount").innerText =
-count;
+}
 
 });
 
-onValue(ref(db,"messages/"+uid),(snap)=>{
+}
 
-const list =
-document.getElementById("messagesList");
+document.getElementById("totalCases").innerHTML =
+total;
 
-list.innerHTML = "";
+document.getElementById("activeCases").innerHTML =
+active;
+
+document.getElementById("completedCases").innerHTML =
+completed;
+
+if(html !== ""){
+
+document.getElementById("caseTable").innerHTML =
+html;
+
+}
+
+});
+
+}
+
+function loadMessages(uid){
+
+const msgRef = ref(db,"messages");
+
+onValue(msgRef,(snapshot)=>{
 
 let count = 0;
 
-snap.forEach(item=>{
+if(snapshot.exists()){
+
+snapshot.forEach(caseNode=>{
+
+caseNode.forEach(messageNode=>{
+
+const msg = messageNode.val();
+
+if(msg.userId === uid){
 
 count++;
 
-const msg = item.val();
-
-list.innerHTML += `
-<div style="padding:10px;border-bottom:1px solid #eee;">
-<strong>${msg.sender || "Admin"}</strong><br>
-${msg.message || ""}
-</div>
-`;
-
-});
-
-document.getElementById("messageCount").innerText =
-count;
+}
 
 });
 
 });
+
+}
+
+document.getElementById("messageCount")
+.innerHTML = count;
+
+});
+
+}
 
 document.getElementById("logoutBtn")
-.addEventListener("click",async()=>{
+.addEventListener("click", async()=>{
+
+const answer =
+confirm("Are you sure you want to logout?");
+
+if(!answer) return;
 
 await signOut(auth);
 
@@ -565,4 +938,3 @@ window.location.href =
 
 </body>
 </html>
-```
