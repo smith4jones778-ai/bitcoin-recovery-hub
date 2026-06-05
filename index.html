@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Bitcoin Recovery Solutions</title>
+<title>Crypto Recovery Solutions</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
@@ -18,87 +18,90 @@ font-family:'Poppins',sans-serif;
 }
 
 body{
-background:#f5f7fa;
-overflow-x:hidden;
+background:#f5f7fb;
+color:#222;
 }
 
 header{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-background:#fff;
+background:#081120;
 padding:15px 8%;
 display:flex;
 justify-content:space-between;
 align-items:center;
-box-shadow:0 3px 15px rgba(0,0,0,.08);
+position:sticky;
+top:0;
 z-index:1000;
 }
 
 .logo{
-font-size:26px;
+font-size:28px;
 font-weight:700;
 color:#f7931a;
 }
 
 nav a{
-margin-left:25px;
+color:white;
 text-decoration:none;
-font-weight:500;
-color:#333;
+margin-left:25px;
+font-size:15px;
 }
 
-.btn{
-background:#f7931a;
-color:#fff;
-padding:12px 25px;
-border-radius:30px;
-text-decoration:none;
-font-weight:600;
+nav a:hover{
+color:#f7931a;
 }
 
 .hero{
-padding:150px 8% 80px;
-display:grid;
-grid-template-columns:1fr 1fr;
+min-height:90vh;
+display:flex;
 align-items:center;
-gap:50px;
-background:linear-gradient(135deg,#0f172a,#1e293b);
+justify-content:center;
+text-align:center;
+background:
+linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,.7)),
+url('https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&w=1600&q=80');
+background-size:cover;
+background-position:center;
 color:white;
+padding:40px;
+}
+
+.hero-content{
+max-width:850px;
 }
 
 .hero h1{
-font-size:55px;
-line-height:1.2;
+font-size:58px;
 margin-bottom:20px;
 }
 
 .hero p{
 font-size:18px;
+line-height:1.8;
 margin-bottom:30px;
 }
 
-.hero-image img{
-width:100%;
-animation:float 4s ease-in-out infinite;
-}
-
-@keyframes float{
-50%{
-transform:translateY(-20px);
-}
+.btn{
+display:inline-block;
+padding:15px 35px;
+background:#f7931a;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
 }
 
 .section{
-padding:90px 8%;
+padding:80px 8%;
 }
 
 .section-title{
 text-align:center;
-font-size:40px;
 margin-bottom:50px;
-color:#111;
+}
+
+.section-title h2{
+font-size:38px;
+color:#081120;
 }
 
 .services{
@@ -110,49 +113,35 @@ gap:25px;
 .card{
 background:white;
 padding:30px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.card:hover{
-transform:translateY(-10px);
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,.1);
 }
 
 .card h3{
 margin-bottom:15px;
-color:#f7931a;
-}
-
-.features{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-gap:25px;
-}
-
-.feature{
-background:#fff;
-padding:25px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+color:#081120;
 }
 
 .stats{
-background:#f7931a;
+background:#081120;
 color:white;
 display:grid;
-grid-template-columns:repeat(4,1fr);
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
 text-align:center;
-padding:50px;
 }
 
-.stats h2{
-font-size:45px;
+.stat{
+padding:40px;
+}
+
+.stat h1{
+color:#f7931a;
 }
 
 .testimonials{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
 gap:25px;
 }
 
@@ -160,190 +149,168 @@ gap:25px;
 background:white;
 padding:30px;
 border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.08);
+box-shadow:0 5px 20px rgba(0,0,0,.1);
 }
 
 .cta{
-background:#0f172a;
-color:white;
+background:#f7931a;
+padding:80px 20px;
 text-align:center;
-padding:100px 20px;
+color:white;
+}
+
+.cta h2{
+font-size:40px;
+margin-bottom:20px;
 }
 
 footer{
-background:#111;
+background:#081120;
 color:white;
-padding:40px;
+padding:50px;
 text-align:center;
 }
 
-@media(max-width:900px){
-
-.hero{
-grid-template-columns:1fr;
-text-align:center;
-}
+@media(max-width:768px){
 
 .hero h1{
-font-size:40px;
+font-size:38px;
 }
 
-.stats{
-grid-template-columns:repeat(2,1fr);
-gap:20px;
+nav{
+display:none;
 }
+
 }
 
 </style>
 </head>
+
 <body>
 
 <header>
-<div class="logo">BTC Recovery</div>
+
+<div class="logo">
+Crypto Recovery
+</div>
 
 <nav>
 <a href="#">Home</a>
 <a href="#">Services</a>
-<a href="#">About</a>
-<a href="#">Contact</a>
+<a href="#">Cases</a>
+<a href="#">Testimonials</a>
 <a href="login.html">Login</a>
-<a class="btn" href="register.html">Get Started</a>
+<a href="register.html">Register</a>
 </nav>
+
 </header>
 
 <section class="hero">
 
-<div>
-<h1>Recover Lost Cryptocurrency Assets Safely</h1>
+<div class="hero-content">
+
+<h1>Professional Bitcoin Recovery Case Management Platform</h1>
 
 <p>
-Professional cryptocurrency tracing, recovery consultation,
-wallet investigation and dispute assistance.
+Helping victims of cryptocurrency fraud organize recovery cases,
+track investigations, communicate securely with specialists,
+and monitor progress through a professional dashboard.
 </p>
 
 <a href="register.html" class="btn">
-Open Recovery Case
+Start Recovery Case
 </a>
 
 </div>
 
-<div class="hero-image">
-<img src="https://cdn-icons-png.flaticon.com/512/6001/6001527.png">
-</div>
-
 </section>
 
 <section class="section">
 
-<h2 class="section-title">
-Our Services
-</h2>
+<div class="section-title">
+<h2>Our Services</h2>
+</div>
 
 <div class="services">
 
 <div class="card">
-<h3>Wallet Investigation</h3>
-<p>
-Detailed blockchain tracing and wallet analysis.
-</p>
+<h3>Case Investigation</h3>
+<p>Submit evidence and organize recovery requests professionally.</p>
 </div>
 
 <div class="card">
-<h3>Recovery Consultation</h3>
-<p>
-Expert guidance for cryptocurrency disputes.
-</p>
+<h3>Wallet Tracking</h3>
+<p>Monitor wallet movements linked to reported incidents.</p>
 </div>
 
 <div class="card">
-<h3>Transaction Tracing</h3>
-<p>
-Blockchain monitoring and reporting.
-</p>
+<h3>Secure Messaging</h3>
+<p>Communicate directly with case managers inside your dashboard.</p>
+</div>
+
+<div class="card">
+<h3>Recovery Monitoring</h3>
+<p>Track every stage of your case from submission to closure.</p>
 </div>
 
 </div>
 
 </section>
 
-<section class="section">
+<section class="section stats">
 
-<h2 class="section-title">
-Why Choose Us
-</h2>
-
-<div class="features">
-
-<div class="feature">
-<h3>24/7 Support</h3>
-<p>Dedicated support team.</p>
+<div class="stat">
+<h1>5,000+</h1>
+<p>Cases Managed</p>
 </div>
 
-<div class="feature">
-<h3>Secure Data</h3>
-<p>Protected Firebase infrastructure.</p>
+<div class="stat">
+<h1>120+</h1>
+<p>Experts</p>
 </div>
 
-<div class="feature">
-<h3>Professional Reports</h3>
-<p>Detailed investigation reports.</p>
-</div>
-
-</div>
-
-</section>
-
-<div class="stats">
-
-<div>
-<h2>500+</h2>
-<p>Cases</p>
-</div>
-
-<div>
-<h2>96%</h2>
-<p>Satisfaction</p>
-</div>
-
-<div>
-<h2>24/7</h2>
+<div class="stat">
+<h1>24/7</h1>
 <p>Support</p>
 </div>
 
-<div>
-<h2>10+</h2>
-<p>Years</p>
+<div class="stat">
+<h1>99%</h1>
+<p>Client Satisfaction</p>
 </div>
 
-</div>
+</section>
 
 <section class="section">
 
-<h2 class="section-title">
-Client Testimonials
-</h2>
+<div class="section-title">
+<h2>Testimonials</h2>
+</div>
 
 <div class="testimonials">
 
 <div class="testimonial">
-★★★★★
 <p>
-Excellent communication and support.
+The dashboard made it easy to track all communication and case updates.
 </p>
+<br>
+<strong>Michael A.</strong>
 </div>
 
 <div class="testimonial">
-★★★★★
 <p>
-Very professional team.
+Very organized platform with secure messaging and excellent support.
 </p>
+<br>
+<strong>Sarah K.</strong>
 </div>
 
 <div class="testimonial">
-★★★★★
 <p>
-Outstanding recovery consultation.
+Professional case management system from start to finish.
 </p>
+<br>
+<strong>David P.</strong>
 </div>
 
 </div>
@@ -352,13 +319,9 @@ Outstanding recovery consultation.
 
 <section class="cta">
 
-<h2>
-Start Your Recovery Journey Today
-</h2>
+<h2>Ready To Open A Recovery Case?</h2>
 
-<br>
-
-<a class="btn" href="register.html">
+<a href="register.html" class="btn">
 Create Account
 </a>
 
@@ -366,9 +329,48 @@ Create Account
 
 <footer>
 
-© 2026 BTC Recovery Solutions
+<h3>Crypto Recovery Solutions</h3>
+
+<p>
+Secure Case Management Platform For Digital Asset Recovery
+</p>
+
+<br>
+
+<p>
+© 2026 All Rights Reserved
+</p>
 
 </footer>
+
+<script type="module">
+
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain: "email-5e336.firebaseapp.com",
+
+databaseURL: "https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId: "email-5e336",
+
+storageBucket: "email-5e336.appspot.com",
+
+messagingSenderId: "561655323170",
+
+appId: "1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId: "G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+</script>
 
 </body>
 </html>
