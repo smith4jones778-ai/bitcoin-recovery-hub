@@ -1,0 +1,421 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Admin Messages</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f4f7fc;
+}
+
+.container{
+display:flex;
+height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:25px;
+color:white;
+overflow-y:auto;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin-bottom:10px;
+color:white;
+text-decoration:none;
+border-radius:12px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+/* Users Panel */
+
+.users-panel{
+width:320px;
+background:white;
+border-right:1px solid #eee;
+display:flex;
+flex-direction:column;
+}
+
+.search{
+padding:15px;
+border:none;
+border-bottom:1px solid #eee;
+outline:none;
+}
+
+.user-list{
+flex:1;
+overflow-y:auto;
+}
+
+.user-item{
+padding:15px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.user-item:hover{
+background:#f8fafc;
+}
+
+/* Chat */
+
+.chat-area{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.chat-header{
+background:white;
+padding:20px;
+border-bottom:1px solid #eee;
+font-weight:600;
+}
+
+.chat-body{
+flex:1;
+overflow-y:auto;
+padding:20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.message{
+max-width:75%;
+padding:12px;
+border-radius:16px;
+}
+
+.admin{
+background:#f7931a;
+color:white;
+align-self:flex-end;
+}
+
+.user{
+background:white;
+border:1px solid #ddd;
+align-self:flex-start;
+}
+
+.time{
+font-size:11px;
+opacity:.7;
+margin-top:4px;
+}
+
+.chat-footer{
+display:flex;
+padding:15px;
+background:white;
+border-top:1px solid #eee;
+}
+
+.chat-footer input{
+flex:1;
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+}
+
+.chat-footer button{
+padding:14px 24px;
+border:none;
+background:#f7931a;
+color:white;
+border-radius:12px;
+margin-left:10px;
+cursor:pointer;
+}
+
+@media(max-width:1000px){
+
+.container{
+flex-direction:column;
+height:auto;
+}
+
+.sidebar{
+width:100%;
+}
+
+.users-panel{
+width:100%;
+height:250px;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">
+BTC Admin
+</div>
+
+<a href="admin-dashboard.html">Dashboard</a>
+<a href="admin-users.html">Users</a>
+<a href="admin-cases.html">Cases</a>
+<a href="admin-messages.html">Messages</a>
+<a href="admin-transactions.html">Transactions</a>
+
+</div>
+
+<div class="users-panel">
+
+<input
+type="text"
+id="searchUser"
+class="search"
+placeholder="Search users">
+
+<div id="userList"
+class="user-list">
+</div>
+
+</div>
+
+<div class="chat-area">
+
+<div class="chat-header" id="chatTitle">
+Select a user
+</div>
+
+<div class="chat-body" id="chatBody">
+</div>
+
+<div class="chat-footer">
+
+<input
+type="text"
+id="messageInput"
+placeholder="Type a reply...">
+
+<button id="sendBtn">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+push,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain:"email-5e336.firebaseapp.com",
+
+databaseURL:"https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId:"email-5e336",
+
+storageBucket:"email-5e336.appspot.com",
+
+messagingSenderId:"561655323170",
+
+appId:"1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId:"G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+let selectedUid = null;
+
+const userList =
+document.getElementById("userList");
+
+const chatBody =
+document.getElementById("chatBody");
+
+const chatTitle =
+document.getElementById("chatTitle");
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+location.href="login.html";
+
+return;
+
+}
+
+onValue(ref(db,"users"),(snapshot)=>{
+
+userList.innerHTML="";
+
+snapshot.forEach(item=>{
+
+const userData = item.val();
+
+userList.innerHTML += `
+<div class="user-item"
+onclick="window.openChat('${item.key}','${userData.fullName}')">
+
+${userData.fullName}
+<br>
+<small>${userData.email}</small>
+
+</div>
+`;
+
+});
+
+});
+
+});
+
+window.openChat = (uid,name)=>{
+
+selectedUid = uid;
+
+chatTitle.innerText =
+"Conversation with " + name;
+
+onValue(
+ref(db,"messages/"+uid),
+(snapshot)=>{
+
+chatBody.innerHTML="";
+
+snapshot.forEach(msg=>{
+
+const data = msg.val();
+
+const cls =
+data.sender==="admin"
+? "admin"
+: "user";
+
+const date =
+new Date(data.time || Date.now());
+
+chatBody.innerHTML += `
+
+<div class="message ${cls}">
+
+${data.message}
+
+<div class="time">
+${date.toLocaleString()}
+</div>
+
+</div>
+
+`;
+
+});
+
+chatBody.scrollTop =
+chatBody.scrollHeight;
+
+});
+
+};
+
+document
+.getElementById("sendBtn")
+.onclick = async()=>{
+
+if(!selectedUid){
+
+alert("Select a user first");
+
+return;
+
+}
+
+const text =
+document
+.getElementById("messageInput")
+.value
+.trim();
+
+if(!text) return;
+
+await push(
+ref(db,"messages/"+selectedUid),
+{
+sender:"admin",
+message:text,
+time:Date.now()
+}
+);
+
+document
+.getElementById("messageInput")
+.value="";
+
+};
+
+</script>
+
+</body>
+</html>
+```

@@ -1,0 +1,445 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Case Management</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f4f7fc;
+}
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:25px;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin-bottom:10px;
+color:white;
+text-decoration:none;
+border-radius:12px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+.main{
+flex:1;
+padding:25px;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:25px;
+}
+
+.search{
+padding:14px;
+width:350px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
+
+.card h3{
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+outline:none;
+}
+
+textarea{
+height:120px;
+resize:none;
+}
+
+button{
+padding:12px 20px;
+border:none;
+background:#f7931a;
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#f8fafc;
+}
+
+.status{
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+background:#dcfce7;
+}
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+.search{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">
+BTC Admin
+</div>
+
+<a href="admin-dashboard.html">Dashboard</a>
+<a href="admin-users.html">Users</a>
+<a href="admin-cases.html">Cases</a>
+<a href="admin-messages.html">Messages</a>
+<a href="admin-transactions.html">Transactions</a>
+
+</div>
+
+<div class="main">
+
+<div class="header">
+
+<h1>Case Management</h1>
+
+<input
+type="text"
+id="searchInput"
+class="search"
+placeholder="Search user...">
+
+</div>
+
+<div class="card">
+
+<h3>Create / Update Case</h3>
+
+<div class="grid">
+
+<input
+type="text"
+id="userUid"
+placeholder="User UID">
+
+<input
+type="text"
+id="caseId"
+placeholder="Case ID">
+
+<input
+type="text"
+id="specialist"
+placeholder="Assigned Specialist">
+
+<input
+type="number"
+id="claimAmount"
+placeholder="Claim Amount">
+
+<select id="caseStatus">
+
+<option>Pending</option>
+<option>Investigation</option>
+<option>Verification</option>
+<option>Recovery In Progress</option>
+<option>Completed</option>
+
+</select>
+
+<input
+type="number"
+id="progress"
+placeholder="Progress %">
+
+</div>
+
+<br>
+
+<textarea
+id="adminNote"
+placeholder="Admin Notes">
+</textarea>
+
+<br><br>
+
+<button id="saveCase">
+Save Case
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Existing Cases</h3>
+
+<table>
+
+<thead>
+
+<tr>
+<th>Case ID</th>
+<th>User</th>
+<th>Status</th>
+<th>Progress</th>
+<th>Claim Amount</th>
+</tr>
+
+</thead>
+
+<tbody id="casesTable">
+
+<tr>
+<td colspan="5">
+No cases found
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+set,
+push,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain:"email-5e336.firebaseapp.com",
+
+databaseURL:"https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId:"email-5e336",
+
+storageBucket:"email-5e336.appspot.com",
+
+messagingSenderId:"561655323170",
+
+appId:"1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId:"G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+location.href="login.html";
+
+return;
+
+}
+
+});
+
+document
+.getElementById("saveCase")
+.onclick = async()=>{
+
+const uid =
+document.getElementById("userUid").value;
+
+if(!uid){
+
+alert("User UID required");
+
+return;
+
+}
+
+const caseData = {
+
+caseId:
+document.getElementById("caseId").value,
+
+specialist:
+document.getElementById("specialist").value,
+
+claimAmount:
+document.getElementById("claimAmount").value,
+
+status:
+document.getElementById("caseStatus").value,
+
+progress:
+document.getElementById("progress").value
+
+};
+
+await set(
+ref(db,"cases/"+uid),
+caseData
+);
+
+await push(
+ref(db,"notes/"+uid),
+{
+note:
+document.getElementById("adminNote").value,
+createdAt:Date.now()
+}
+);
+
+await push(
+ref(db,"activities/"+uid),
+{
+text:
+"Case updated by administrator",
+time:Date.now()
+}
+);
+
+alert("Case saved successfully");
+
+};
+
+onValue(ref(db,"cases"),(snapshot)=>{
+
+const table =
+document.getElementById("casesTable");
+
+table.innerHTML="";
+
+snapshot.forEach(item=>{
+
+const data = item.val();
+
+table.innerHTML += `
+
+<tr>
+
+<td>${data.caseId || "-"}</td>
+
+<td>${item.key}</td>
+
+<td>
+<span class="status">
+${data.status || "-"}
+</span>
+</td>
+
+<td>${data.progress || 0}%</td>
+
+<td>$${data.claimAmount || 0}</td>
+
+</tr>
+
+`;
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
+```

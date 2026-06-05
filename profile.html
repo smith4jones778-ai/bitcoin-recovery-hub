@@ -1,0 +1,422 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Profile Settings</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f4f7fc;
+}
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#0f172a;
+padding:25px;
+color:white;
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin-bottom:8px;
+color:white;
+text-decoration:none;
+border-radius:12px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+.main{
+flex:1;
+padding:25px;
+}
+
+.page-title{
+font-size:30px;
+font-weight:700;
+margin-bottom:20px;
+}
+
+.profile-header{
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+display:flex;
+gap:25px;
+align-items:center;
+margin-bottom:20px;
+}
+
+.avatar{
+width:120px;
+height:120px;
+border-radius:50%;
+object-fit:cover;
+background:#ddd;
+}
+
+.info h2{
+margin-bottom:8px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(350px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+}
+
+.card h3{
+margin-bottom:15px;
+}
+
+.form-group{
+margin-bottom:15px;
+}
+
+.form-group label{
+display:block;
+margin-bottom:6px;
+font-size:14px;
+}
+
+.form-group input{
+width:100%;
+padding:14px;
+border:1px solid #ddd;
+border-radius:12px;
+outline:none;
+}
+
+button{
+padding:14px 25px;
+border:none;
+border-radius:12px;
+background:#f7931a;
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+.status{
+margin-top:15px;
+font-size:14px;
+}
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+.profile-header{
+flex-direction:column;
+text-align:center;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">
+BTC Recovery
+</div>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="case-details.html">Recovery Case</a>
+<a href="transactions.html">Transactions</a>
+<a href="messages.html">Messages</a>
+<a href="profile.html">Profile</a>
+
+</div>
+
+<div class="main">
+
+<h1 class="page-title">
+Profile Settings
+</h1>
+
+<div class="profile-header">
+
+<img
+id="profileImage"
+class="avatar"
+src="https://via.placeholder.com/120">
+
+<div class="info">
+<h2 id="fullName">
+Loading...
+</h2>
+<p id="email">
+Loading...
+</p>
+</div>
+
+</div>
+
+<div class="grid">
+
+<div class="card">
+
+<h3>Personal Information</h3>
+
+<div class="form-group">
+<label>Full Name</label>
+<input type="text" id="name">
+</div>
+
+<div class="form-group">
+<label>Phone Number</label>
+<input type="text" id="phone">
+</div>
+
+<div class="form-group">
+<label>Country</label>
+<input type="text" id="country">
+</div>
+
+<button id="saveProfile">
+Update Profile
+</button>
+
+<div id="profileStatus" class="status"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Wallet Information</h3>
+
+<div class="form-group">
+<label>Wallet Address</label>
+<input type="text" id="walletAddress">
+</div>
+
+<button id="saveWallet">
+Save Wallet
+</button>
+
+<div id="walletStatus" class="status"></div>
+
+</div>
+
+<div class="card">
+
+<h3>Profile Image</h3>
+
+<input
+type="file"
+id="profileUpload">
+
+<br><br>
+
+<button id="uploadImage">
+Upload Image
+</button>
+
+<div id="imageStatus" class="status"></div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+onValue,
+update
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain:"email-5e336.firebaseapp.com",
+
+databaseURL:"https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId:"email-5e336",
+
+storageBucket:"email-5e336.appspot.com",
+
+messagingSenderId:"561655323170",
+
+appId:"1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId:"G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+let uid = "";
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+location.href="login.html";
+
+return;
+
+}
+
+uid = user.uid;
+
+onValue(ref(db,"users/"+uid),(snapshot)=>{
+
+if(!snapshot.exists()) return;
+
+const data = snapshot.val();
+
+document.getElementById("fullName").innerText =
+data.fullName || "";
+
+document.getElementById("email").innerText =
+data.email || "";
+
+document.getElementById("name").value =
+data.fullName || "";
+
+document.getElementById("phone").value =
+data.phone || "";
+
+document.getElementById("country").value =
+data.country || "";
+
+document.getElementById("walletAddress").value =
+data.walletAddress || "";
+
+if(data.profilePhoto){
+
+document.getElementById("profileImage").src =
+data.profilePhoto;
+
+}
+
+});
+
+});
+
+document.getElementById("saveProfile")
+.onclick = async()=>{
+
+await update(
+ref(db,"users/"+uid),
+{
+fullName:
+document.getElementById("name").value,
+
+phone:
+document.getElementById("phone").value,
+
+country:
+document.getElementById("country").value
+}
+);
+
+document.getElementById("profileStatus")
+.innerText =
+"Profile updated successfully";
+
+};
+
+document.getElementById("saveWallet")
+.onclick = async()=>{
+
+await update(
+ref(db,"users/"+uid),
+{
+walletAddress:
+document.getElementById("walletAddress").value
+}
+);
+
+document.getElementById("walletStatus")
+.innerText =
+"Wallet information updated";
+
+};
+
+/*
+Firebase Storage upload
+should be added here.
+
+Recommended flow:
+
+1. Upload file to Firebase Storage
+2. Get download URL
+3. Save URL to:
+users/{uid}/profilePhoto
+*/
+
+</script>
+
+</body>
+</html>
+```

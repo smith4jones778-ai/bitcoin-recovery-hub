@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Messages</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f5f7fb;
+}
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:260px;
+background:#0f172a;
+padding:25px;
+color:white;
+}
+
+.logo{
+font-size:26px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin-bottom:8px;
+text-decoration:none;
+color:white;
+border-radius:12px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+.main{
+flex:1;
+display:flex;
+flex-direction:column;
+}
+
+.chat-header{
+background:white;
+padding:20px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+font-weight:600;
+font-size:20px;
+}
+
+.chat-body{
+flex:1;
+padding:20px;
+overflow-y:auto;
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.message{
+max-width:75%;
+padding:14px;
+border-radius:18px;
+word-wrap:break-word;
+}
+
+.user{
+align-self:flex-end;
+background:#f7931a;
+color:white;
+}
+
+.admin{
+align-self:flex-start;
+background:white;
+border:1px solid #e5e7eb;
+}
+
+.time{
+font-size:11px;
+opacity:.7;
+margin-top:5px;
+}
+
+.chat-footer{
+padding:20px;
+background:white;
+display:flex;
+gap:10px;
+border-top:1px solid #eee;
+}
+
+.chat-footer input{
+flex:1;
+padding:14px;
+border-radius:12px;
+border:1px solid #ddd;
+outline:none;
+}
+
+.chat-footer button{
+padding:14px 24px;
+border:none;
+background:#f7931a;
+color:white;
+border-radius:12px;
+cursor:pointer;
+font-weight:600;
+}
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+.message{
+max-width:90%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">
+BTC Recovery
+</div>
+
+<a href="dashboard.html">Dashboard</a>
+<a href="case-details.html">Recovery Cases</a>
+<a href="transactions.html">Transactions</a>
+<a href="messages.html">Messages</a>
+<a href="profile.html">Profile</a>
+
+</div>
+
+<div class="main">
+
+<div class="chat-header">
+Support Messages
+</div>
+
+<div class="chat-body" id="chatBody">
+</div>
+
+<div class="chat-footer">
+
+<input
+type="text"
+id="messageInput"
+placeholder="Type your message...">
+
+<button id="sendBtn">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+push,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain: "email-5e336.firebaseapp.com",
+
+databaseURL: "https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId: "email-5e336",
+
+storageBucket: "email-5e336.appspot.com",
+
+messagingSenderId: "561655323170",
+
+appId: "1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId: "G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+const chatBody =
+document.getElementById("chatBody");
+
+const sendBtn =
+document.getElementById("sendBtn");
+
+const input =
+document.getElementById("messageInput");
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+
+location.href="login.html";
+return;
+
+}
+
+const uid = user.uid;
+
+onValue(
+ref(db,"messages/"+uid),
+(snapshot)=>{
+
+chatBody.innerHTML="";
+
+snapshot.forEach(msg=>{
+
+const data = msg.val();
+
+const div =
+document.createElement("div");
+
+div.className =
+"message " +
+(data.sender==="admin"
+? "admin"
+: "user");
+
+const date =
+new Date(data.time || Date.now());
+
+div.innerHTML=`
+${data.message}
+<div class="time">
+${date.toLocaleString()}
+</div>
+`;
+
+chatBody.appendChild(div);
+
+});
+
+chatBody.scrollTop =
+chatBody.scrollHeight;
+
+});
+
+sendBtn.onclick = async ()=>{
+
+const text =
+input.value.trim();
+
+if(!text) return;
+
+await push(
+ref(db,"messages/"+uid),
+{
+sender:"user",
+message:text,
+time:Date.now()
+}
+);
+
+input.value="";
+
+};
+
+});
+
+</script>
+
+</body>
+</html>
+```

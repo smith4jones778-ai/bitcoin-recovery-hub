@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Transactions</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#f4f7fc;
+}
+
+.container{
+display:flex;
+min-height:100vh;
+}
+
+.sidebar{
+width:280px;
+background:#0f172a;
+padding:25px;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:30px;
+}
+
+.sidebar a{
+display:block;
+padding:14px;
+margin-bottom:10px;
+text-decoration:none;
+color:white;
+border-radius:12px;
+}
+
+.sidebar a:hover{
+background:#1e293b;
+}
+
+.main{
+flex:1;
+padding:25px;
+}
+
+.card{
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 15px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
+
+.card h3{
+margin-bottom:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+}
+
+input,
+select{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:10px;
+outline:none;
+}
+
+button{
+padding:12px 20px;
+border:none;
+background:#f7931a;
+color:white;
+border-radius:10px;
+cursor:pointer;
+font-weight:600;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+}
+
+th{
+background:#f8fafc;
+}
+
+.action-btn{
+padding:8px 12px;
+font-size:13px;
+}
+
+.delete-btn{
+background:#dc2626;
+}
+
+.status{
+padding:5px 10px;
+border-radius:20px;
+font-size:12px;
+background:#dcfce7;
+}
+
+@media(max-width:900px){
+
+.container{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+}
+
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="sidebar">
+
+<div class="logo">
+BTC Admin
+</div>
+
+<a href="admin-dashboard.html">Dashboard</a>
+<a href="admin-users.html">Users</a>
+<a href="admin-cases.html">Cases</a>
+<a href="admin-messages.html">Messages</a>
+<a href="admin-transactions.html">Transactions</a>
+
+</div>
+
+<div class="main">
+
+<div class="card">
+
+<h3>Create Transaction</h3>
+
+<div class="grid">
+
+<input type="text" id="uid" placeholder="User UID">
+
+<input type="text" id="reference" placeholder="Reference Number">
+
+<input type="text" id="description" placeholder="Description">
+
+<input type="number" id="amount" placeholder="Amount">
+
+<select id="status">
+<option>Pending</option>
+<option>Processing</option>
+<option>Completed</option>
+<option>Rejected</option>
+</select>
+
+</div>
+
+<br>
+
+<button id="saveTransaction">
+Create Transaction
+</button>
+
+</div>
+
+<div class="card">
+
+<h3>Transaction Records</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>User UID</th>
+<th>Reference</th>
+<th>Description</th>
+<th>Amount</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="transactionsTable">
+
+<tr>
+<td colspan="6">
+No transactions found
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+push,
+remove,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey:"AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain:"email-5e336.firebaseapp.com",
+
+databaseURL:"https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId:"email-5e336",
+
+storageBucket:"email-5e336.appspot.com",
+
+messagingSenderId:"561655323170",
+
+appId:"1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId:"G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+onAuthStateChanged(auth,(user)=>{
+
+if(!user){
+location.href="login.html";
+return;
+}
+
+});
+
+document
+.getElementById("saveTransaction")
+.onclick = async()=>{
+
+const uid =
+document.getElementById("uid").value;
+
+if(!uid){
+alert("User UID required");
+return;
+}
+
+await push(
+ref(db,"transactions/"+uid),
+{
+date:new Date().toLocaleDateString(),
+reference:
+document.getElementById("reference").value,
+description:
+document.getElementById("description").value,
+amount:
+document.getElementById("amount").value,
+status:
+document.getElementById("status").value,
+createdAt:Date.now()
+}
+);
+
+alert("Transaction created");
+
+};
+
+const table =
+document.getElementById("transactionsTable");
+
+onValue(ref(db,"transactions"),(snapshot)=>{
+
+table.innerHTML="";
+
+snapshot.forEach(user=>{
+
+user.forEach(tx=>{
+
+const data = tx.val();
+
+table.innerHTML += `
+<tr>
+
+<td>${user.key}</td>
+
+<td>${data.reference || "-"}</td>
+
+<td>${data.description || "-"}</td>
+
+<td>${data.amount || "-"}</td>
+
+<td>
+<span class="status">
+${data.status || "-"}
+</span>
+</td>
+
+<td>
+
+<button
+class="action-btn delete-btn"
+onclick="window.deleteTx('${user.key}','${tx.key}')">
+Delete
+</button>
+
+</td>
+
+</tr>
+`;
+
+});
+
+});
+
+});
+
+window.deleteTx = async(uid,id)=>{
+
+if(!confirm("Delete transaction?"))
+return;
+
+await remove(
+ref(db,"transactions/"+uid+"/"+id)
+);
+
+};
+
+</script>
+
+</body>
+</html>

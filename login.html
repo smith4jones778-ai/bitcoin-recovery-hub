@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login - BTC Recovery</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#0f172a,#1e293b,#334155);
+padding:20px;
+}
+
+.login-box{
+width:100%;
+max-width:450px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(18px);
+padding:35px;
+border-radius:25px;
+border:1px solid rgba(255,255,255,.2);
+box-shadow:0 15px 40px rgba(0,0,0,.3);
+}
+
+.logo{
+text-align:center;
+font-size:32px;
+font-weight:700;
+color:#f7931a;
+margin-bottom:10px;
+}
+
+.subtitle{
+text-align:center;
+color:white;
+margin-bottom:30px;
+}
+
+.input-group{
+margin-bottom:15px;
+}
+
+.input-group label{
+display:block;
+margin-bottom:6px;
+color:white;
+font-size:14px;
+}
+
+.input-group input{
+width:100%;
+padding:14px;
+border:none;
+outline:none;
+border-radius:12px;
+font-size:15px;
+}
+
+.password-box{
+position:relative;
+}
+
+.password-box span{
+position:absolute;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+font-size:14px;
+font-weight:600;
+color:#333;
+}
+
+.options{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin:15px 0;
+color:white;
+font-size:14px;
+}
+
+.options a{
+color:#f7931a;
+text-decoration:none;
+}
+
+button{
+width:100%;
+padding:15px;
+border:none;
+border-radius:12px;
+background:#f7931a;
+color:white;
+font-size:16px;
+font-weight:600;
+cursor:pointer;
+}
+
+button:hover{
+opacity:.9;
+}
+
+.status{
+text-align:center;
+margin-top:15px;
+color:white;
+}
+
+.bottom{
+text-align:center;
+margin-top:20px;
+color:white;
+}
+
+.bottom a{
+color:#f7931a;
+text-decoration:none;
+}
+
+</style>
+</head>
+<body>
+
+<div class="login-box">
+
+<div class="logo">
+BTC Recovery
+</div>
+
+<div class="subtitle">
+Secure Account Login
+</div>
+
+<form id="loginForm">
+
+<div class="input-group">
+<label>Email Address</label>
+<input type="email" id="email" required>
+</div>
+
+<div class="input-group">
+<label>Password</label>
+
+<div class="password-box">
+<input type="password" id="password" required>
+<span onclick="togglePassword()">Show</span>
+</div>
+
+</div>
+
+<div class="options">
+
+<label>
+<input type="checkbox" id="rememberMe">
+ Remember Me
+</label>
+
+<a href="forgot-password.html">
+Forgot Password?
+</a>
+
+</div>
+
+<button type="submit">
+Login
+</button>
+
+</form>
+
+<div id="status" class="status"></div>
+
+<div class="bottom">
+Don't have an account?
+<a href="register.html">Register</a>
+</div>
+
+</div>
+
+<script>
+function togglePassword(){
+
+const pass =
+document.getElementById("password");
+
+pass.type =
+pass.type === "password"
+? "text"
+: "password";
+
+}
+</script>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getAuth,
+signInWithEmailAndPassword,
+setPersistence,
+browserLocalPersistence,
+browserSessionPersistence
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+getDatabase,
+ref,
+get
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBA_gGITL3vOX_wymV8m3c7h_2kYxUEL0A",
+
+authDomain: "email-5e336.firebaseapp.com",
+
+databaseURL: "https://email-5e336-default-rtdb.firebaseio.com",
+
+projectId: "email-5e336",
+
+storageBucket: "email-5e336.appspot.com",
+
+messagingSenderId: "561655323170",
+
+appId: "1:561655323170:web:42fcf886c34f2d5a16487b",
+
+measurementId: "G-J92WNBY5RL"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getDatabase(app);
+
+const form =
+document.getElementById("loginForm");
+
+const status =
+document.getElementById("status");
+
+form.addEventListener("submit",
+async(e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById("email").value;
+
+const password =
+document.getElementById("password").value;
+
+const remember =
+document.getElementById("rememberMe").checked;
+
+try{
+
+status.innerHTML =
+"Signing in...";
+
+await setPersistence(
+auth,
+remember
+? browserLocalPersistence
+: browserSessionPersistence
+);
+
+const userCredential =
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+);
+
+const uid =
+userCredential.user.uid;
+
+const snapshot =
+await get(ref(db,"users/"+uid));
+
+if(snapshot.exists()){
+
+const userData =
+snapshot.val();
+
+if(userData.role === "admin"){
+
+window.location.href =
+"admin-dashboard.html";
+
+}else{
+
+window.location.href =
+"dashboard.html";
+
+}
+
+}else{
+
+status.innerHTML =
+"User profile not found.";
+
+}
+
+}catch(error){
+
+status.innerHTML =
+error.message;
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
